@@ -56,14 +56,14 @@
         $.get("http://127.0.0.1:5000/predict?REVIEW=" + document.getElementById("review_text").value, function(data, status) {
           var result;
           if (data == 1) {
-            result = "1-2";
+            result = "1-2 stars";
           } else if (data == 2) {
-            result = "3-4";
+            result = "3-4 stars";
           } else {
-            result = "5";
+            result = "5 stars";
           }
           if (document.getElementById("review_text").value.length > 10) {
-            document.getElementById("predicted_rating").innerText = "Predicted Rating: " + result + " stars"
+            document.getElementById("predicted_rating").innerText = "Predicted Rating: " + result
           }
 
         });
