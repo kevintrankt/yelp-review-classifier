@@ -8,6 +8,7 @@ This project uses scikit-learn to classify text data from Yelp reviews to predic
 
 * scikit-learn
 * Flask
+* Pandas
 
 ### Usage
 
