@@ -2,7 +2,7 @@
 
 This project uses scikit-learn to classify text data from Yelp reviews to predict what rating will be given. A frontend is provided to visualize the results.
 
-## README.md UNDER DEVELOPMENT 
+## Project in progress
 
 ### Prerequisites
 
