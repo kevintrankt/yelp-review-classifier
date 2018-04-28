@@ -104,11 +104,11 @@ if __name__ == '__main__':
     features = hstack((features, np.array(cleaned_df['sentiment'])[:,None]))
     
     # Bagged LR for Classification
-    seed = 7
+    seed = 0
     kfold = model_selection.KFold(n_splits=20, random_state=seed)
     cart = LogisticRegression()
-    num_trees = 5
-    model = BaggingClassifier(base_estimator=cart, n_estimators=num_trees, random_state=seed)
+    model = BaggingClassifier(base_estimator=cart, n_estimators=5, random_state=seed)
     model.fit(features, labels)
 
+    print("API is ready")
     app.run(debug=True)
