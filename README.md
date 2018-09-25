@@ -8,8 +8,6 @@ This project uses scikit-learn to classify text data from Yelp reviews to predic
 
 A frontend is provided to visualize the results.
 
-## README under development
-
 ### Prerequisites
 
 - scikit-learn
