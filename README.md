@@ -1,23 +1,30 @@
-# yelp-review-classifier
+# [yelp-review-classifier](https://kevintrankt.com/yelp)
 
-This project uses scikit-learn to classify text data from Yelp reviews to predict what rating will be given. A frontend is provided to visualize the results.
+[![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE)
+
+# Introduction
+
+This project uses scikit-learn to classify text data from Yelp reviews to predict what rating will be given. The application first preprocesses the Yelp data. Then the application creates a K-Folds cross validator with 20 splits. A Bagging Classifier is initialized with 5 Logistic Regression models.
+
+A frontend is provided to visualize the results.
 
 ## README under development
 
 ### Prerequisites
 
-* scikit-learn
-* Flask
-* Pandas
+- scikit-learn
+- Flask
+- Pandas
+- nltk
 
 ### Usage
 
- Start the API
+Clone this repository locally and train the model:
 
+```bash
+git clone https://github.com/kevintrankt/yelp-review-classifier.git
+cd yelp-review-classifier
+python api.py
 ```
-$ python api.py
-```
 
- Enable cross-origin resource sharing. This can be done using a browser extension. [Allow-Control-Allow-Origin: *](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi)
-
- Navigate to index.html and start typing in the box!
+Once the model is done training, visit [yelp-review-classifier](https://kevintrankt.com/yelp) and start typing out a review to see the suggested rating!

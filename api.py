@@ -12,8 +12,11 @@ from sklearn.linear_model import LogisticRegression
 import nltk
 from nltk.corpus import wordnet as wn
 import ssl
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/predict', methods=['GET'])
@@ -27,12 +30,13 @@ def predict():
     input_text['a'] = input_text['a'].str.replace('[^\w\s]', '')
 
     # Add Sentiment column
-    input_text['sentiment'] = input_text['a'].apply(lambda x: TextBlob(x).sentiment[0])
+    input_text['sentiment'] = input_text['a'].apply(
+        lambda x: TextBlob(x).sentiment[0])
 
     # Vectorize
     input_transform = tfidf.transform(input_text['a'])
     input_transform = hstack((input_transform, np.array(input_text['sentiment'])[:,
-                                               None]))
+                                                                                 None]))
 
     prediction = model.predict(input_transform)[0]
     return str(prediction)
@@ -40,10 +44,8 @@ def predict():
 
 if __name__ == '__main__':
 
-    # This line is used if a connection is refused when downloading from nltk
-    # ssl._create_default_https_context = ssl._create_unverified_context
-
     # Setting up stop words for data preprocessing
+    nltk.download('wordnet')
     stop = stopwords.words('english')
     food_sets = wn.synsets('food')
 
@@ -63,21 +65,23 @@ if __name__ == '__main__':
     cleaned_df.columns = ['rating', 'review']
 
     # Bin the reviews into 3 classes
-    cleaned_df['bin'] = pd.cut(cleaned_df['rating'], [0, 2, 4, float('inf')], labels=['1', '2', '3'])
+    cleaned_df['bin'] = pd.cut(cleaned_df['rating'], [
+                               0, 2, 4, float('inf')], labels=['1', '2', '3'])
 
     # Set dataframe to lowercase
-    cleaned_df['review'] = cleaned_df['review'].apply(lambda x: ' '.join(x.lower() for x in x.split()))
+    cleaned_df['review'] = cleaned_df['review'].apply(
+        lambda x: ' '.join(x.lower() for x in x.split()))
 
     # Remove symbols
     cleaned_df['review'] = cleaned_df['review'].str.replace('[^\w\s]', '')
 
     # Lemmatize
-    cleaned_df['review'] = cleaned_df['review'].apply(lambda x: \
-                                                          ' '.join([Word(word).lemmatize() for word in x.split()]))
+    cleaned_df['review'] = cleaned_df['review'].apply(lambda x:
+                                                      ' '.join([Word(word).lemmatize() for word in x.split()]))
 
     # Compute sentiment of every row and add a column in the new df
-    cleaned_df['sentiment'] = cleaned_df['review'].apply(lambda x: \
-                                                             TextBlob(x).sentiment[0])
+    cleaned_df['sentiment'] = cleaned_df['review'].apply(lambda x:
+                                                         TextBlob(x).sentiment[0])
 
     # Remove stop words
     cleaned_df['review'] = cleaned_df['review'].apply(lambda x: ' '.join(x
@@ -101,13 +105,14 @@ if __name__ == '__main__':
     labels = cleaned_df.bin
 
     # Add column for sentiment
-    features = hstack((features, np.array(cleaned_df['sentiment'])[:,None]))
-    
+    features = hstack((features, np.array(cleaned_df['sentiment'])[:, None]))
+
     # Bagged LR for Classification
     seed = 0
     kfold = model_selection.KFold(n_splits=20, random_state=seed)
     cart = LogisticRegression()
-    model = BaggingClassifier(base_estimator=cart, n_estimators=5, random_state=seed)
+    model = BaggingClassifier(
+        base_estimator=cart, n_estimators=5, random_state=seed)
     model.fit(features, labels)
 
     print("API is ready")
